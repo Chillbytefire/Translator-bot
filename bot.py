@@ -98,10 +98,8 @@ async def on_message(message):
 
         await message.reply(embed=embed)
 
-    except Exception as e:
-        await message.reply(
-            f"Translation failed: {e}"
-        )
+    except Exception:
+        await message.reply("⚠️ Couldn't translate that message.")
 
 keep_alive()
 bot.run(TOKEN, reconnect=True)
