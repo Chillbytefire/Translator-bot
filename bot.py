@@ -1,6 +1,7 @@
 import os
 import requests
 import discord
+import logging
 from flask import Flask
 from threading import Thread
 from dotenv import load_dotenv
@@ -8,6 +9,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 TOKEN = os.getenv("DISCORD_TOKEN")
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 intents = discord.Intents.default()
 intents.message_content = True
