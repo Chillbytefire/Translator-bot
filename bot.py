@@ -56,9 +56,28 @@ async def on_message(message):
 
         translated = translate(referenced.content)
 
-        await message.reply(
-            f" **Translation:**\n{translated}"
+        embed = discord.Embed(
+            title="Translation",
+            description=translated,
         )
+
+        embed.set_author(
+            name=referenced.author.display_name,
+            icon_url=referenced.author.display_avatar.url
+        )
+
+        embed.add_field(
+            name="Original Message",
+            value=referenced.content[:1024],
+            inline=False
+        )
+
+        embed.set_footer(
+            text=f"Requested by {message.author.display_name}",
+            icon_url=message.author.display_avatar.url
+        )
+
+        await message.reply(embed=embed)
 
     except Exception as e:
         await message.reply(
