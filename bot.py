@@ -4,11 +4,9 @@ import discord
 import logging
 from flask import Flask
 from threading import Thread
-from dotenv import load_dotenv
 
-load_dotenv()
 
-TOKEN = os.getenv("DISCORD_TOKEN")
+TOKEN = os.environ["DISCORD_TOKEN"]
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
@@ -58,6 +56,9 @@ async def on_message(message):
     if message.author.bot:
         return
 
+    if not message.mentions:
+        return
+
     if bot.user not in message.mentions:
         return
 
@@ -103,4 +104,4 @@ async def on_message(message):
         )
 
 keep_alive()
-bot.run(TOKEN)
+bot.run(TOKEN, reconnect=True)
