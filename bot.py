@@ -71,6 +71,7 @@ async def on_message(message):
     try:
         referenced = await message.channel.fetch_message(
             message.reference.message_id
+        )
 
         if referenced.author.bot:
             await message.reply("Reply to a user's message to translate.")
