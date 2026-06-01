@@ -30,7 +30,6 @@ def keep_alive():
     t.start()
 
 
-# ✅ FIXED TRANSLATE (safe + no crash on bad response)
 def translate(text):
     url = "https://translate-pa.googleapis.com/v1/translate"
 
@@ -46,7 +45,6 @@ def translate(text):
     try:
         data = requests.get(url, params=params, timeout=10).json()
 
-        # safer extraction (API sometimes changes structure)
         return data.get("translation") or "⚠️ Translation unavailable"
 
     except Exception:
@@ -63,22 +61,18 @@ async def on_message(message):
     if message.author.bot:
         return
 
-    # ✅ CLEAN TRIGGER LOGIC (FIXED)
     is_mentioned = bot.user in message.mentions
     is_reply = message.reference is not None
 
-    # must be either mention OR reply
     if not (is_mentioned or is_reply):
         return
 
     try:
-        # ✅ If reply → translate replied message
         if message.reference:
             referenced = await message.channel.fetch_message(
                 message.reference.message_id
             )
         else:
-            # if only mention but no reply
             await message.reply("Reply to a message to translate it.")
             return
 
