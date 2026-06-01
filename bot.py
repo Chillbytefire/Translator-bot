@@ -60,20 +60,20 @@ async def on_ready():
 async def on_message(message):
     if message.author.bot:
         return
+    
+    if bot.user not in message.mentions:
+        return
 
-    is_mentioned = bot.user in message.mentions
-    is_reply = message.reference is not None
-
-    if not (is_mentioned or is_reply):
+    if not message.reference:
+        await message.reply("Mention me on a reply to translate.")
         return
 
     try:
-        if message.reference:
-            referenced = await message.channel.fetch_message(
-                message.reference.message_id
-            )
-        else:
-            await message.reply("Reply to a message to translate it.")
+        referenced = await message.channel.fetch_message(
+            message.reference.message_id
+
+        if referenced.author.bot:
+            await message.reply("Reply to a user's message to translate.")
             return
 
         translated = translate(referenced.content)
