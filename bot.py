@@ -64,6 +64,24 @@ async def on_message(message):
     if bot.user not in message.mentions:
         return
 
+    # Remove the mention from the message
+    content = message.content.replace(f"<@{bot.user.id}>", "")
+    content = content.replace(f"<@!{bot.user.id}>", "")  # nickname mention form
+    content = content.strip().lower()
+
+    if content == "ping":
+        start = time.perf_counter()
+
+        ping_msg = await message.reply("Pinging...")
+
+        end = time.perf_counter()
+
+        latency = round(bot.latency * 1000)
+        ping_ms = round((end - start) * 1000)
+
+        await ping_msg.edit(content=f"Ping: `{ping_ms} ms\n Websocket heartbeat" `{latency}")
+        return
+
     if not message.reference:
         await message.reply("Mention me on a reply to translate.")
         return
