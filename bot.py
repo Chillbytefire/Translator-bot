@@ -70,16 +70,18 @@ async def on_message(message):
     content = content.strip().lower()
 
     if content == "ping":
-        start = time.perf_counter()
-
         ping_msg = await message.reply("Pinging...")
-
-        end = time.perf_counter()
-
         latency = round(bot.latency * 1000)
-        ping_ms = round((end - start) * 1000)
+        ping_ms = round(
+            (ping_msg.created_at - message.created_at).total_seconds() * 1000
+        )
 
-        await ping_msg.edit(content=f"Ping: `{ping_ms} ms\n Websocket heartbeat" `{latency}")
+        await ping_msg.edit(
+            content=(
+                f" Ping: `{ping_ms} ms`\n"
+                f" WebSocket heartbeat: `{latency} ms`"
+            )
+        )
         return
 
     if not message.reference:
@@ -96,6 +98,10 @@ async def on_message(message):
             return
 
         translated = translate(referenced.content)
+
+        if translated.startswith("⚠️"):
+            await message.reply(translated)
+            return
 
         embed = discord.Embed(
             title="Translation",
